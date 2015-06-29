@@ -1,20 +1,29 @@
 class Item < ActiveRecord::Base
-  has_and_belongs_to_many :users
+  has_many :users, through: :rankings
 
 
 
 
   class << self
 
-    def not_connected_to(user)
-      where(<<-SQL, user.id)
-        NOT EXISTS (SELECT 1
-          FROM   items_users
-          WHERE  item.id = items_users.item_id
-          AND items_users.user_id = ?
-          )
-      SQL
+    def inefficient_unrated_items
+      items = []
+      ranked = []
+
+      Item.all.each do |item|
+        items.push item.id
+      end
+
+      Ranking.all.each do |rank|
+        ranked.push rank.item_id
+      end
+      puts ranked
+
+      items.to_a.reject! {|i| ranked.include? i }
+
     end
+
+
   end
 
 end

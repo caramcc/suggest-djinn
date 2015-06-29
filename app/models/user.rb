@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  has_and_belongs_to_many :items
+  has_many :items, through: :rankings
 
 
 ## When User u adds item:
@@ -32,29 +32,55 @@ user_item_hash = {}
 
 =end
 
+  def inefficient_unrated_items
+    items = []
+    ranked = []
 
-  def add_item
+    Item.all.each do |item|
+      items.push item.id
+    end
+
+    user_ranked = Ranking.where(user_id: self.id)
+
+    user_ranked.each do |rank|
+      ranked.push rank.item_id
+    end
+    puts ranked
+
+    items.to_a.reject! {|i| ranked.include? i }
 
   end
+
+
+  def rank_item(item_id, rank)
+    Ranking.create(user_id: self.id, item_id: item_id, ranking: rank)
+  end
+
 
   def suggest(number = 25)
     user_item_hash = {}
 
-    unranked_items = Item.joins('LEFT JOIN items_users ON items_users.item_id = item.id').
-        where(items_users: { user_id: nil })
-    ranked_items = Item.where(:user_id => self.id)
+    # unranked_items = Item.joins('LEFT JOIN rankings ON rankings.item_id = item.id').
+    #     where(rankings: { user_id: nil })
+    unranked_items = Item.where(ranking: {item_id => nil})
+    ranked_items = Ranking.where(:user_id => self.id)
     ranked_count = ranked_items.size
 
     unranked_items.each do |item|
       running_avg = 0
       ranked_items.each do |ranked|
         pref_diff = Pair.average_diff(item.id, ranked.id)
-        user_raking =
-
-
+        user_raking = Ranking.where(:user_id => self.id, item.id => ranked.id).ranking
+        running_avg += pref_diff + user_raking
       end
+      user_item_hash[item.id] = running_avg
     end
 
+    user_item_hash.sort_by { |k, v| v}
+
+    (0..number).each do |i|
+      puts user_item_hash[i]
+    end
   end
 
 end

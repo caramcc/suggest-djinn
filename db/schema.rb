@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150629191620) do
+ActiveRecord::Schema.define(version: 20150629200433) do
 
   create_table "items", force: :cascade do |t|
     t.string   "kind",       limit: 255
@@ -19,14 +19,6 @@ ActiveRecord::Schema.define(version: 20150629191620) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
-
-  create_table "items_users", id: false, force: :cascade do |t|
-    t.integer "item_id", limit: 4, null: false
-    t.integer "user_id", limit: 4, null: false
-  end
-
-  add_index "items_users", ["item_id", "user_id"], name: "index_items_users_on_item_id_and_user_id", using: :btree
-  add_index "items_users", ["user_id", "item_id"], name: "index_items_users_on_user_id_and_item_id", using: :btree
 
   create_table "pairs", force: :cascade do |t|
     t.integer  "item_1_id",    limit: 4
@@ -38,6 +30,14 @@ ActiveRecord::Schema.define(version: 20150629191620) do
 
   add_index "pairs", ["item_1_id", "item_2_id"], name: "index_pairs_on_item_1_id_and_item_2_id", using: :btree
   add_index "pairs", ["item_2_id", "item_1_id"], name: "index_pairs_on_item_2_id_and_item_1_id", using: :btree
+
+  create_table "rankings", force: :cascade do |t|
+    t.integer  "item_id",    limit: 4
+    t.integer  "user_id",    limit: 4
+    t.integer  "ranking",    limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "username",        limit: 255
