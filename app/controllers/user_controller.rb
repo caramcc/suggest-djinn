@@ -15,12 +15,16 @@ class UserController < ApplicationController
 
   def add_item
     item_name = params[:item_name]
+    rating = params[:rating]
 
     item = Item.find_by_name(item_name)
 
     if item.nil?
-      Item.new(name: item_name).save
+      item = Item.new(name: item_name)
+      item.save
     end
+
+
 
   end
 
