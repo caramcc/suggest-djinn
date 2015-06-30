@@ -3,10 +3,6 @@ class User < ActiveRecord::Base
   has_secure_password
 
 
-## When User u adds item:
-# for every other Item i that u has ranked
-# add the difference in u's preference for i and j to the i-j average
-
 
 =begin
 
@@ -68,8 +64,6 @@ user_item_hash = {}
   def suggest(number)
     user_item_hash = {}
 
-    # unranked_items = Item.joins('LEFT JOIN rankings ON rankings.item_id = item.id').
-    #     where(rankings: { user_id: nil })
     unranked_items, ranked_items = inefficient_unrated_items
     ranked_count = ranked_items.size
 
@@ -89,7 +83,8 @@ user_item_hash = {}
     output = ''
 
     (0..number).each do |i|
-      output << user_item_hash[i] + "\n"
+      output << user_item_hash[i]
+      output << "\n"
     end
 
     output

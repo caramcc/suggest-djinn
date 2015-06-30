@@ -12,16 +12,18 @@ class Item < ActiveRecord::Base
     def cascade(item_id, user_id, rating)
       unranked_items, ranked_items = User.find_by_id(user_id).inefficient_unrated_items
 
-      ranked_items.each do |ranked|
-        if ranked.id < item_id
-          ij = Pair.find_by_params(item_1_id: ranked.id, item_2_id: item_id)
+      ranked_items.each do |ranked_id|
+        if ranked_id < item_id
+          ij = Pair.find_by(item_1_id: ranked_id, item_2_id: item_id)
         else
-          ij = Pair.find_by_params(item_1_id: item_id, item_2_id: ranked.id)
+          ij = Pair.find_by(item_1_id: item_id, item_2_id: ranked_id)
         end
 
         if ij.nil?
-          ij = Pair.create(ranked.id, item_id)
+          ij = Pair.create(ranked_id, item_id)
         end
+
+        rating ||= 0
 
         diff = ij.differential * ij.ratings_count + rating
         ij.ratings_count += 1
@@ -29,7 +31,7 @@ class Item < ActiveRecord::Base
 
         ij.save
       end
-      
+
     end
 
 

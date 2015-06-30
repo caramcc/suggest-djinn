@@ -4,7 +4,6 @@ class UserController < ApplicationController
   def create
     user = User.new(user_params)
 
-
     if user.save
       session[:user_id] = user.id
       redirect_to '/users#info'
@@ -24,11 +23,12 @@ class UserController < ApplicationController
       item.save
     end
 
-    rate = Ranking.new(item_id: item.id, user_id: current_user.id, rating: rating)
+    rate = Ranking.new(item_id: item.id, user_id: current_user.id, ranking: rating)
     rate.save
 
     Item.cascade(item.id, current_user.id, rating)
 
+    redirect_to '/rate'
   end
 
   def rate_new
@@ -44,9 +44,6 @@ class UserController < ApplicationController
     @top_items = titles
   end
 
-  def add_rating
-
-  end
 
   def suggest
     user = User.find_by_id(params[:id])

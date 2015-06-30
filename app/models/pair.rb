@@ -8,7 +8,7 @@ class Pair < ActiveRecord::Base
         item_1_id = item_2_id
         item_2_id = temp
       end
-      pair = Pair.new(item_1_id: item_1_id, item_2_id: item_2_id)
+      pair = Pair.new(item_1_id: item_1_id, item_2_id: item_2_id, differential: 0, ratings_count: 0)
       pair.save
 
       pair

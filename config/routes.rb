@@ -15,6 +15,6 @@ Rails.application.routes.draw do
 
   # Rating
   get '/rate' => 'user#rate_new'
-  post '/rate' => 'user#add_rating'
+  post '/rate' => 'user#add_item'
 
 end
