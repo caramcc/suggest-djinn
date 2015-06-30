@@ -5,10 +5,10 @@ class User < ActiveRecord::Base
   def rate(item_name, rating)
     item = Item.find_or_create_by(name: item_name)
 
-    rate = Ranking.new(item_id: item.id, user_id: current_user.id, ranking: rating)
+    rate = Ranking.new(item_id: item.id, user_id: self.id, ranking: rating)
     rate.save
 
-    Item.cascade(item.id, current_user.id, rating.to_i)
+    Item.cascade(item.id, self.id, rating.to_i)
   end
 
   def inefficient_unrated_items
