@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   has_many :items, through: :rankings
+  has_secure_password
 
 
 ## When User u adds item:
@@ -49,38 +50,56 @@ user_item_hash = {}
 
     items.to_a.reject! {|i| ranked.include? i }
 
+    return items, ranked
   end
 
 
+## When User u adds item:
+# for every other Item i that u has ranked
+# add the difference in u's preference for i and j to the i-j average
+
+  # 1. for every item i
+  # 2.  for every other item j
+  # 3.   for every user u expressing preference for both i and j
+  # 4.     add the difference in u’s preference for i and j to an average
+
   def rank_item(item_id, rank)
+    unranked_items, ranked_items = inefficient_unrated_items
+    ranked_items.each do |i|
+
+    end
     Ranking.create(user_id: self.id, item_id: item_id, ranking: rank)
   end
 
 
-  def suggest(number = 25)
+  def suggest(number)
     user_item_hash = {}
 
     # unranked_items = Item.joins('LEFT JOIN rankings ON rankings.item_id = item.id').
     #     where(rankings: { user_id: nil })
-    unranked_items = Item.where(ranking: {item_id => nil})
-    ranked_items = Ranking.where(:user_id => self.id)
+    unranked_items, ranked_items = inefficient_unrated_items
     ranked_count = ranked_items.size
 
-    unranked_items.each do |item|
+    unranked_items.each do |item_id|
       running_avg = 0
-      ranked_items.each do |ranked|
-        pref_diff = Pair.average_diff(item.id, ranked.id)
-        user_raking = Ranking.where(:user_id => self.id, item.id => ranked.id).ranking
+      ranked_items.each do |ranked_id|
+        pref_diff = Pair.average_diff(item_id, ranked_id)
+        user_raking = Ranking.where(:user_id => self.id, :item_id => ranked_id).first.ranking
         running_avg += pref_diff + user_raking
+        running_avg /= ranked_count
       end
-      user_item_hash[item.id] = running_avg
+      user_item_hash[item_id] = running_avg
     end
 
     user_item_hash.sort_by { |k, v| v}
 
+    output = ''
+
     (0..number).each do |i|
-      puts user_item_hash[i]
+      output << user_item_hash[i] + "\n"
     end
+
+    output
   end
 
 end
