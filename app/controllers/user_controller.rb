@@ -13,16 +13,12 @@ class UserController < ApplicationController
   end
 
   def add_item
-    item_name = params[:item_name]
-    rating = params[:rating]
+    item_name = params[:user][:item_name]
+    rating = params[:user][:rating]
 
-    item = Item.find_by_name(item_name)
+    item = Item.find_or_create_by(name: item_name)
 
-    if item.nil?
-      item = Item.new(name: item_name)
-      item.save
-    end
-
+    
     rate = Ranking.new(item_id: item.id, user_id: current_user.id, ranking: rating)
     rate.save
 

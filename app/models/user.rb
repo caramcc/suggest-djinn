@@ -42,7 +42,6 @@ user_item_hash = {}
     user_ranked.each do |rank|
       ranked.push rank.item_id
     end
-    puts ranked
 
     items.to_a.reject! {|i| ranked.include? i }
 
@@ -77,13 +76,15 @@ user_item_hash = {}
       end
       user_item_hash[item_id] = running_avg
     end
+    puts 'userhash'
+    puts user_item_hash
 
-    user_item_hash.sort_by { |k, v| v}
+    sorted_array = user_item_hash.sort_by { |k, v| v}
 
     output = ''
 
     (0..number).each do |i|
-      output << user_item_hash[i]
+      output << sorted_array[i]
       output << "\n"
     end
 
