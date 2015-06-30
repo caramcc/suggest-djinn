@@ -39,7 +39,7 @@ class UserController < ApplicationController
 
   def suggest
     user = User.find_by_id(params[:id])
-    number = params[:number]
+    number = params[:number].to_i
     number ||= 25
     render text: user.suggest(number)
   end

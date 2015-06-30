@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get '/signup' => 'user#new'
   post '/user' => 'user#create'
   get '/user/:id/suggestions' => 'user#suggest'
+  get '/user/:id/suggestions/:number' => 'user#suggest'
 
   # Rating
   get '/rate' => 'user#rate_new'
