@@ -70,8 +70,10 @@ user_item_hash = {}
       running_avg = 0
       ranked_items.each do |ranked_id|
         pref_diff = Pair.average_diff(item_id, ranked_id)
-        user_raking = Ranking.where(:user_id => self.id, :item_id => ranked_id).first.ranking
-        running_avg += pref_diff + user_raking
+        user_ranking = Ranking.where(:user_id => self.id, :item_id => ranked_id).first
+        user_ranking.ranking ||= 0
+
+        running_avg = pref_diff + user_ranking.ranking + running_avg
         running_avg /= ranked_count
       end
       user_item_hash[item_id] = running_avg
@@ -79,13 +81,18 @@ user_item_hash = {}
     puts 'userhash'
     puts user_item_hash
 
-    sorted_array = user_item_hash.sort_by { |k, v| v}
+    sorted_array = user_item_hash.sort_by { |k, v| v}.reverse
 
     output = ''
 
     (0..number).each do |i|
-      output << sorted_array[i]
-      output << "\n"
+      unless sorted_array[i].nil?
+        item = Item.find_by_id(sorted_array[i][0])
+        output << item.name
+        output << " [#{sorted_array[i]}]"
+        output << "<br>"
+      end
+
     end
 
     output

@@ -27,6 +27,7 @@ class Pair < ActiveRecord::Base
 
       if found.last.nil?
         Pair.create(item_1_id, item_2_id)
+        0
       else
         if found.last.differential.nil?
           0
