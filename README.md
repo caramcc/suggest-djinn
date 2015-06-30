@@ -6,3 +6,8 @@ https://suggest-djinn.herokuapp.com/
 
 # Discussion of results
 forthcoming
+
+# TODO
+future areas for improvement:
+
+- UI Fixes, i.e. search suggest when rating things (twitter bloodhound)

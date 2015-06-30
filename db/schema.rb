@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150629200433) do
+ActiveRecord::Schema.define(version: 20150630073324) do
 
   create_table "items", force: :cascade do |t|
     t.string   "kind",       limit: 255
@@ -21,11 +21,12 @@ ActiveRecord::Schema.define(version: 20150629200433) do
   end
 
   create_table "pairs", force: :cascade do |t|
-    t.integer  "item_1_id",    limit: 4
-    t.integer  "item_2_id",    limit: 4
-    t.float    "differential", limit: 24
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.integer  "item_1_id",     limit: 4
+    t.integer  "item_2_id",     limit: 4
+    t.float    "differential",  limit: 24
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.integer  "ratings_count", limit: 4
   end
 
   add_index "pairs", ["item_1_id", "item_2_id"], name: "index_pairs_on_item_1_id_and_item_2_id", using: :btree

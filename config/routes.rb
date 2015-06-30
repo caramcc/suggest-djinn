@@ -13,5 +13,8 @@ Rails.application.routes.draw do
   post '/user' => 'user#create'
   get '/user/:id/suggestions' => 'user#suggest'
 
+  # Rating
+  get '/rate' => 'user#rate_new'
+  post '/rate' => 'user#add_rating'
 
 end

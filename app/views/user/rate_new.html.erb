@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="col-lg-6">
+    <h1>Rate a new thing</h1>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('.selectpicker').selectpicker();
+      });
+    </script>
+
+    <%= form_for :user, url: '/rate' do |f| %>
+
+      <div class="input-group input-group">
+        <span class="input-group-addon" id="sizing-addon1">Fun Thing</span>
+        <%= f.text_field :item_name, class: 'form-control', placeholder: 'Type something you like', autofocus: true  %>
+      </div>
+      <div class="input-group input-group">
+        <span class="input-group-addon" id="sizing-addon1">Rating</span>
+        <%= f.number_field :rating, class: 'form-control', placeholder: 'Rate from 1-5', autofocus: true, max: 5  %>
+      </div>
+
+
+      <%= f.submit 'Submit', class: 'btn btn-primary' %>
+
+    <% end %>
+  </div>
+</div>

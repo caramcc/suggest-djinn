@@ -3,11 +3,15 @@ class Pair < ActiveRecord::Base
   class << self
 
     def create(item_1_id, item_2_id)
+      if item_1_id > item_2_id
+        temp = item_1_id
+        item_1_id = item_2_id
+        item_2_id = temp
+      end
       pair = Pair.new(item_1_id: item_1_id, item_2_id: item_2_id)
       pair.save
 
-      # return
-      0
+      pair
     end
 
 

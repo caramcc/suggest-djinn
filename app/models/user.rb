@@ -54,14 +54,7 @@ user_item_hash = {}
   end
 
 
-## When User u adds item:
-# for every other Item i that u has ranked
-# add the difference in u's preference for i and j to the i-j average
 
-  # 1. for every item i
-  # 2.  for every other item j
-  # 3.   for every user u expressing preference for both i and j
-  # 4.     add the difference in u’s preference for i and j to an average
 
   def rank_item(item_id, rank)
     unranked_items, ranked_items = inefficient_unrated_items

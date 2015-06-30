@@ -24,7 +24,27 @@ class UserController < ApplicationController
       item.save
     end
 
+    rate = Ranking.new(item_id: item.id, user_id: current_user.id, rating: rating)
+    rate.save
 
+    Item.cascade(item.id, current_user.id, rating)
+
+  end
+
+  def rate_new
+    #TODO make non-naive, also make useful
+    top = Ranking.group('item_id').order('count_item_id desc').count('item_id').first(100)
+    titles = []
+    top.each do |t|
+      name = Item.find_by_id(t[0]).name
+      unless name.blank?
+        titles.push name
+      end
+    end
+    @top_items = titles
+  end
+
+  def add_rating
 
   end
 
