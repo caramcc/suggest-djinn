@@ -13,16 +13,12 @@ class UserController < ApplicationController
   end
 
   def add_item
+
     item_name = params[:user][:item_name]
     rating = params[:user][:rating]
 
-    item = Item.find_or_create_by(name: item_name)
+    User.find_by_id(current_user.id).rate(item_name, rating)
 
-
-    rate = Ranking.new(item_id: item.id, user_id: current_user.id, ranking: rating)
-    rate.save
-
-    Item.cascade(item.id, current_user.id, rating.to_i)
 
     redirect_to '/rate'
   end

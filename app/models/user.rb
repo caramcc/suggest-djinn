@@ -2,32 +2,14 @@ class User < ActiveRecord::Base
   has_many :items, through: :rankings
   has_secure_password
 
+  def rate(item_name, rating)
+    item = Item.find_or_create_by(name: item_name)
 
+    rate = Ranking.new(item_id: item.id, user_id: current_user.id, ranking: rating)
+    rate.save
 
-=begin
-
-1. for every item i the user u expresses no preference for
-2.  for every item j that user u expresses a preference for
-3.   find the average preference difference between j and i
-4.   add this diff to u’s preference value for j
-5.   add this to a running average
-6. return the top items, ranked by these averages
-
-
-user_item_hash = {}
-# for each item |i| that user u has not ranked
-    running_avg = 0
-    ranked_count = u.number_ranked
-#   for each item |j| that u has ranked
-#     average preference difference between j and i over all users
-#     add this to u's preference for j
-      running_avg += preference_diff + pref_for_j
-    end
-    user_item_hash[i.id] = running_avg
+    Item.cascade(item.id, current_user.id, rating.to_i)
   end
-  return top items ranked by these averages
-
-=end
 
   def inefficient_unrated_items
     items = []
